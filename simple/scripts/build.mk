@@ -15,6 +15,7 @@ CRC_IN_PARAM   := c
 CRC_OUT_PARAM  := o
 
 TARGET         := $(PROJECT_NAME).rpt
+SOURCE         := ../src/crc_gen.vhd 
 SOURCES        := build.tcl parameter.tcl timing.xdc $(TOP_NAME).vhd
 
 sources: $(SOURCES)
@@ -44,5 +45,5 @@ build.tcl :
 $(TOP_NAME).vhd :
 	$(TOPGEN) -n $(CRC_NAME) -b $(NR_DATA_BITS) > $@
 
-$(PROJECT_NAME).rpt : $(SOURCES)
+$(PROJECT_NAME).rpt : $(SOURCES) $(SOURCE)
 	$(VIVADO) -mode batch -source build.tcl
