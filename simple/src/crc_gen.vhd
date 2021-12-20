@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------
 --!     @file    crcgen.vhd
---!     @brief   CRCGEN :
---!     @version 0.0.1
---!     @date    2021/12/16
+--!     @brief   CRCGEN : シンプルに for-loop を回して CRC を演算するモジュール
+--!     @version 0.0.2
+--!     @date    2021/12/20
 --!     @author  Ichiro Kawazome <ichiro_k@ca2.so-net.ne.jp>
 -----------------------------------------------------------------------------------
 --
@@ -58,14 +58,22 @@ library ieee;
 use     ieee.std_logic_1164.all;
 use     ieee.numeric_std.all;
 architecture RTL of CRC_GEN is
+    -------------------------------------------------------------------------------
+    -- CRC_BITS の１次元配列のタイプ宣言
+    -------------------------------------------------------------------------------
     subtype   CRC_TYPE          is std_logic_vector(CRC_BITS-1 downto 0);
     signal    curr_crc          :  CRC_TYPE;
-
     function  CONV_CRC_TYPE(N:integer) return CRC_TYPE is
     begin
         return std_logic_vector(TO_UNSIGNED(N,CRC_BITS));
     end CONV_CRC_TYPE;
-
+    -------------------------------------------------------------------------------
+    -- CRC用多項式(CRC_POLY)が整数のままだと使いにくいので、ビット配列に変換しておく
+    -------------------------------------------------------------------------------
+    constant  CRC_POLY_BIT      : CRC_TYPE := CONV_CRC_TYPE(CRC_POLY);
+    -------------------------------------------------------------------------------
+    -- CRCの初期値を計算する関数の定義
+    -------------------------------------------------------------------------------
     function  CONV_CRC_INIT(CRC_INIT: integer) return CRC_TYPE is
         variable crc_init_val   :  CRC_TYPE;
     begin
@@ -76,10 +84,13 @@ architecture RTL of CRC_GEN is
         end if;
         return crc_init_val;
     end function;
-
-    constant  CALC_CRC_INIT     :  CRC_TYPE := CONV_CRC_INIT(CRC_INIT);
-    constant  CALC_CRC_POLY_BIT :  CRC_TYPE := CONV_CRC_TYPE(CRC_POLY);
-
+    -------------------------------------------------------------------------------
+    -- CRCの初期値
+    -------------------------------------------------------------------------------
+    constant  CRC_INIT_BIT      :  CRC_TYPE := CONV_CRC_INIT(CRC_INIT);
+    -------------------------------------------------------------------------------
+    -- １ビットの入力データに対してCRC演算する関数の定義
+    -------------------------------------------------------------------------------
     function  CALC_CRC(CRC:CRC_TYPE;D:std_logic) return CRC_TYPE is
         variable new_crc        :  CRC_TYPE;
         variable crc_xor_d_bit  :  std_logic;
@@ -88,7 +99,7 @@ architecture RTL of CRC_GEN is
         crc_xor_d_bit := CRC(CRC'high) xor D;
         prev_crc_bit  := '0';
         for i in 0 to CRC_BITS-1 loop
-            if (CALC_CRC_POLY_BIT(i) = '1') then
+            if (CRC_POLY_BIT(i) = '1') then
                 new_crc(i) := prev_crc_bit xor crc_xor_d_bit;
             else
                 new_crc(i) := prev_crc_bit;
@@ -97,7 +108,12 @@ architecture RTL of CRC_GEN is
         end loop;
         return new_crc;
     end CALC_CRC;
-
+    -------------------------------------------------------------------------------
+    -- 複数ビットまとめてCRC演算する関数の定義(簡易版)
+    --    指定されたビット数の回数だけ上述のCALC_CRC関数を呼び出すだけの簡単な関数。
+    --    記述は単純明解だが、論理合成ツールがちゃんと最適化してくれないと、とんでもなく遅延の大きい
+    --    回路になってしまう可能性がある。
+    -------------------------------------------------------------------------------
     function  CALC_CRC(CRC:CRC_TYPE;D:std_logic_vector) return CRC_TYPE is
         variable new_crc : CRC_TYPE;
     begin
@@ -112,14 +128,14 @@ begin
         variable next_crc :  CRC_TYPE;
     begin
         if (RST = '1') then
-            curr_crc <= CALC_CRC_INIT;
-            CRC      <= CALC_CRC_INIT;
+            curr_crc <= CRC_INIT_BIT;
+            CRC      <= CRC_INIT_BIT;
             VAL      <= '0';
         elsif (CLK'event and CLK = '1') then
             if (LOAD = '1') then
                 next_crc := CALC_CRC(curr_crc, DATA);
                 if (LAST = '1') then
-                    curr_crc <= CALC_CRC_INIT;
+                    curr_crc <= CRC_INIT_BIT;
                     CRC      <= next_crc;
                     VAL      <= '1';
                 else
