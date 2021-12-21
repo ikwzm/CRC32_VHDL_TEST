@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------
 --!     @file    crcgen.vhd
 --!     @brief   CRCGEN : シンプルに for-loop を回して CRC を演算するモジュール
---!     @version 0.0.2
---!     @date    2021/12/20
+--!     @version 0.0.3
+--!     @date    2021/12/21
 --!     @author  Ichiro Kawazome <ichiro_k@ca2.so-net.ne.jp>
 -----------------------------------------------------------------------------------
 --
@@ -39,7 +39,8 @@ use     ieee.std_logic_1164.all;
 entity  CRC_GEN is
     generic (
         CRC_BITS  : integer := 32;
-        CRC_POLY  : integer := 16#04C11DB7#;
+        CRC_POLY  : string  := "0xEDB88320";
+        CRC_RIGHT : boolean := TRUE;
         CRC_INIT  : integer := 1;
         DATA_BITS : integer := 32
     );
@@ -57,15 +58,19 @@ end entity;
 library ieee;
 use     ieee.std_logic_1164.all;
 use     ieee.numeric_std.all;
+use     work.util.all;
 architecture RTL of CRC_GEN is
     -------------------------------------------------------------------------------
     -- CRC_BITS の１次元配列のタイプ宣言
     -------------------------------------------------------------------------------
     subtype   CRC_TYPE          is std_logic_vector(CRC_BITS-1 downto 0);
     signal    curr_crc          :  CRC_TYPE;
-    function  CONV_CRC_TYPE(N:integer) return CRC_TYPE is
+    function  CONV_CRC_TYPE(CRC_POLY_STR : string) return CRC_TYPE is
+        variable   crc_poly_bit :  CRC_TYPE;
+        variable   crc_poly_len :  integer;
     begin
-        return std_logic_vector(TO_UNSIGNED(N,CRC_BITS));
+        STRING_TO_STD_LOGIC_VECTOR(CRC_POLY_STR, crc_poly_bit, crc_poly_len);
+        return crc_poly_bit;
     end CONV_CRC_TYPE;
     -------------------------------------------------------------------------------
     -- CRC用多項式(CRC_POLY)が整数のままだと使いにくいので、ビット配列に変換しておく
@@ -96,16 +101,29 @@ architecture RTL of CRC_GEN is
         variable crc_xor_d_bit  :  std_logic;
         variable prev_crc_bit   :  std_logic;
     begin
-        crc_xor_d_bit := CRC(CRC'high) xor D;
-        prev_crc_bit  := '0';
-        for i in 0 to CRC_BITS-1 loop
-            if (CRC_POLY_BIT(i) = '1') then
-                new_crc(i) := prev_crc_bit xor crc_xor_d_bit;
-            else
-                new_crc(i) := prev_crc_bit;
-            end if;
-            prev_crc_bit := CRC(i);
-        end loop;
+        if (CRC_RIGHT) then
+            crc_xor_d_bit := CRC(CRC'low) xor D;
+            prev_crc_bit  := '0';
+            for i in CRC_TYPE'high downto CRC_TYPE'low loop
+                if (CRC_POLY_BIT(i) = '1') then
+                    new_crc(i) := prev_crc_bit xor crc_xor_d_bit;
+                else
+                    new_crc(i) := prev_crc_bit;
+                end if;
+                prev_crc_bit := CRC(i);
+            end loop;
+        else
+            crc_xor_d_bit := CRC(CRC'high) xor D;
+            prev_crc_bit  := '0';
+            for i in CRC_TYPE'low to CRC_TYPE'high loop
+                if (CRC_POLY_BIT(i) = '1') then
+                    new_crc(i) := prev_crc_bit xor crc_xor_d_bit;
+                else
+                    new_crc(i) := prev_crc_bit;
+                end if;
+                prev_crc_bit := CRC(i);
+            end loop;
+        end if;
         return new_crc;
     end CALC_CRC;
     -------------------------------------------------------------------------------

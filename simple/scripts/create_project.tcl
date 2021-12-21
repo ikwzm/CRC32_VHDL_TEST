@@ -99,6 +99,7 @@ proc add_vhdl_file {fileset_name library_name file_name} {
     set_property "file_type" "VHDL"        $file_obj
     set_property "library"   $library_name $file_obj
 }
+add_vhdl_file sources_1 "WORK"  [file join $project_directory ".." "src" "util.vhd"]
 add_vhdl_file sources_1 "WORK"  [file join $project_directory ".." "src" "crc_gen.vhd"]
 add_vhdl_file sources_1 "WORK"  [file join $project_directory "${top_name}.vhd"]
 add_vhdl_file sim_1     "WORK"  [file join $project_directory "${top_name}_test.vhd"]

@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------------
 --!     @file    crcgen_test.vhd
 --!     @brief   CRCGEN TEST BENCH:
---!     @version 0.0.1
+--!     @version 0.0.3
 --!     @date    2021/12/21
 --!     @author  Ichiro Kawazome <ichiro_k@ca2.so-net.ne.jp>
 -----------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ architecture MODEL of CRC_TOP_TEST is
     signal    VAL           :  std_logic;
     subtype   I_DATA_TYPE   is integer range 0 to 255;
     type      I_DATA_VECTOR is array (integer range <>) of I_DATA_TYPE;
-    constant  O_CRC_1       :  CRC_TYPE := std_logic_vector(to_unsigned(16#52214B25#, 32));
+    constant  O_CRC_1       :  CRC_TYPE := X"A4D2844A";
     constant  I_DATA_1      :  I_DATA_VECTOR(0 to 511)
                             := (16#97#, 16#45#, 16#B6#, 16#65#, 16#37#, 16#83#, 16#2D#, 16#A7#,
                                 16#A5#, 16#F8#, 16#A2#, 16#99#, 16#DD#, 16#58#, 16#C6#, 16#A0#,
