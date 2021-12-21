@@ -11,6 +11,9 @@ PROJECTS = crc32_0032 \
 build:
 	$(foreach project, $(PROJECTS), make -C $(project) build;)
 
+project:
+	$(foreach project, $(PROJECTS), make -C $(project) project;)
+
 sources:
 	$(foreach project, $(PROJECTS), make -C $(project) sources;)
 
