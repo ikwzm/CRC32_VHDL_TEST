@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Thu Dec 16 02:38:20 2021
+| Date         : Tue Dec 21 14:20:49 2021
 | Host         : Jabberwock running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_utilization -file ./crc32_4096.rpt
 | Design       : crc32_4096_top
@@ -32,11 +32,11 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| CLB LUTs                | 9138 |     0 |     70560 | 12.95 |
-|   LUT as Logic          | 9138 |     0 |     70560 | 12.95 |
+| CLB LUTs                | 9104 |     0 |     70560 | 12.90 |
+|   LUT as Logic          | 9104 |     0 |     70560 | 12.90 |
 |   LUT as Memory         |    0 |     0 |     28800 |  0.00 |
-| CLB Registers           | 4695 |     0 |    141120 |  3.33 |
-|   Register as Flip Flop | 4695 |     0 |    141120 |  3.33 |
+| CLB Registers           | 4692 |     0 |    141120 |  3.32 |
+|   Register as Flip Flop | 4692 |     0 |    141120 |  3.32 |
 |   Register as Latch     |    0 |     0 |    141120 |  0.00 |
 | CARRY8                  |    0 |     0 |      8820 |  0.00 |
 | F7 Muxes                |    0 |     0 |     35280 |  0.00 |
@@ -58,7 +58,7 @@ Table of Contents
 | 0     |            _ |       Reset |            - |
 | 0     |          Yes |           - |            - |
 | 65    |          Yes |           - |          Set |
-| 4630  |          Yes |           - |        Reset |
+| 4627  |          Yes |           - |        Reset |
 | 0     |          Yes |         Set |            - |
 | 0     |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
@@ -70,22 +70,22 @@ Table of Contents
 +--------------------------------------------+------+-------+-----------+-------+
 |                  Site Type                 | Used | Fixed | Available | Util% |
 +--------------------------------------------+------+-------+-----------+-------+
-| CLB                                        | 1509 |     0 |      8820 | 17.11 |
-|   CLBL                                     |  929 |     0 |           |       |
-|   CLBM                                     |  580 |     0 |           |       |
-| LUT as Logic                               | 9138 |     0 |     70560 | 12.95 |
-|   using O5 output only                     |    5 |       |           |       |
-|   using O6 output only                     | 6926 |       |           |       |
-|   using O5 and O6                          | 2207 |       |           |       |
+| CLB                                        | 1520 |     0 |      8820 | 17.23 |
+|   CLBL                                     |  919 |     0 |           |       |
+|   CLBM                                     |  601 |     0 |           |       |
+| LUT as Logic                               | 9104 |     0 |     70560 | 12.90 |
+|   using O5 output only                     |    2 |       |           |       |
+|   using O6 output only                     | 7048 |       |           |       |
+|   using O5 and O6                          | 2054 |       |           |       |
 | LUT as Memory                              |    0 |     0 |     28800 |  0.00 |
 |   LUT as Distributed RAM                   |    0 |     0 |           |       |
 |   LUT as Shift Register                    |    0 |     0 |           |       |
-| CLB Registers                              | 4695 |     0 |    141120 |  3.33 |
-|   Register driven from within the CLB      |  570 |       |           |       |
-|   Register driven from outside the CLB     | 4125 |       |           |       |
-|     LUT in front of the register is unused |  284 |       |           |       |
-|     LUT in front of the register is used   | 3841 |       |           |       |
-| Unique Control Sets                        |  520 |       |     17640 |  2.95 |
+| CLB Registers                              | 4692 |     0 |    141120 |  3.32 |
+|   Register driven from within the CLB      |  571 |       |           |       |
+|   Register driven from outside the CLB     | 4121 |       |           |       |
+|     LUT in front of the register is unused |  313 |       |           |       |
+|     LUT in front of the register is used   | 3808 |       |           |       |
+| Unique Control Sets                        |  522 |       |     17640 |  2.96 |
 +--------------------------------------------+------+-------+-----------+-------+
 * * Note: Available Control Sets calculated as Slices * 2, Review the Control Sets Report for more information regarding control sets.
 
@@ -194,12 +194,12 @@ Table of Contents
 +----------+------+---------------------+
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
-| LUT6     | 6211 |                 CLB |
-| FDCE     | 4630 |            Register |
-| LUT2     | 3400 |                 CLB |
-| LUT4     | 1101 |                 CLB |
-| LUT5     |  448 |                 CLB |
-| LUT3     |  185 |                 CLB |
+| LUT6     | 6101 |                 CLB |
+| FDCE     | 4627 |            Register |
+| LUT2     | 3538 |                 CLB |
+| LUT4     |  920 |                 CLB |
+| LUT5     |  429 |                 CLB |
+| LUT3     |  170 |                 CLB |
 | FDPE     |   65 |            Register |
 | OBUF     |   33 |                 I/O |
 | INBUF    |   12 |                 I/O |
@@ -227,7 +227,7 @@ Table of Contents
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------
 | Tool Version      : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date              : Thu Dec 16 02:38:23 2021
+| Date              : Tue Dec 21 14:20:52 2021
 | Host              : Jabberwock running 64-bit Ubuntu 18.04.4 LTS
 | Command           : report_timing -file ./crc32_4096.rpt -append
 | Design            : crc32_4096_top
@@ -238,27 +238,27 @@ Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 
 Timing Report
 
-Slack (MET) :             0.041ns  (required time - arrival time)
-  Source:                 i_data_reg[2]/C
+Slack (MET) :             0.076ns  (required time - arrival time)
+  Source:                 i_data_reg[0]/C
                             (rising edge-triggered cell FDCE clocked by CLK  {rise@0.000ns fall@2.250ns period=4.500ns})
-  Destination:            d_data_reg[3218]/D
+  Destination:            d_data_reg[1952]/D
                             (rising edge-triggered cell FDCE clocked by CLK  {rise@0.000ns fall@2.250ns period=4.500ns})
   Path Group:             CLK
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            4.500ns  (CLK rise@4.500ns - CLK rise@0.000ns)
-  Data Path Delay:        4.191ns  (logic 0.094ns (2.243%)  route 4.097ns (97.757%))
+  Data Path Delay:        4.169ns  (logic 0.093ns (2.231%)  route 4.076ns (97.769%))
   Logic Levels:           0  
-  Clock Path Skew:        -0.260ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    2.579ns = ( 7.079 - 4.500 ) 
-    Source Clock Delay      (SCD):    3.265ns
-    Clock Pessimism Removal (CPR):    0.426ns
+  Clock Path Skew:        -0.247ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.540ns = ( 7.040 - 4.500 ) 
+    Source Clock Delay      (SCD):    3.194ns
+    Clock Pessimism Removal (CPR):    0.407ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
     Discrete Jitter          (DJ):    0.000ns
     Phase Error              (PE):    0.000ns
-  Clock Net Delay (Source):      2.375ns (routing 1.251ns, distribution 1.124ns)
-  Clock Net Delay (Destination): 2.001ns (routing 1.137ns, distribution 0.864ns)
+  Clock Net Delay (Source):      2.304ns (routing 1.049ns, distribution 1.255ns)
+  Clock Net Delay (Destination): 1.962ns (routing 0.954ns, distribution 1.008ns)
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
@@ -273,13 +273,13 @@ Slack (MET) :             0.041ns  (required time - arrival time)
                          net (fo=1, routed)           0.343     0.862    CLK_IBUF
     BUFGCE_X0Y62         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.028     0.890 r  CLK_IBUF_BUFG_inst/O
-    X0Y0 (CLOCK_ROOT)    net (fo=4695, routed)        2.375     3.265    CLK_IBUF_BUFG
-    SLICE_X48Y75         FDCE                                         r  i_data_reg[2]/C
+    X0Y1 (CLOCK_ROOT)    net (fo=4692, routed)        2.304     3.194    CLK_IBUF_BUFG
+    SLICE_X42Y77         FDCE                                         r  i_data_reg[0]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X48Y75         FDCE (Prop_FFF_SLICEM_C_Q)
-                                                      0.094     3.359 r  i_data_reg[2]/Q
-                         net (fo=512, routed)         4.097     7.456    i_data[2]
-    SLICE_X30Y27         FDCE                                         r  d_data_reg[3218]/D
+    SLICE_X42Y77         FDCE (Prop_EFF_SLICEM_C_Q)
+                                                      0.093     3.287 r  i_data_reg[0]/Q
+                         net (fo=512, routed)         4.076     7.363    i_data[0]
+    SLICE_X25Y131        FDCE                                         r  d_data_reg[1952]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock CLK rise edge)        4.500     4.500 r  
@@ -293,17 +293,17 @@ Slack (MET) :             0.041ns  (required time - arrival time)
                          net (fo=1, routed)           0.302     5.054    CLK_IBUF
     BUFGCE_X0Y62         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.024     5.078 r  CLK_IBUF_BUFG_inst/O
-    X0Y0 (CLOCK_ROOT)    net (fo=4695, routed)        2.001     7.079    CLK_IBUF_BUFG
-    SLICE_X30Y27         FDCE                                         r  d_data_reg[3218]/C
-                         clock pessimism              0.426     7.505    
-                         clock uncertainty           -0.035     7.469    
-    SLICE_X30Y27         FDCE (Setup_DFF2_SLICEL_C_D)
-                                                      0.027     7.496    d_data_reg[3218]
+    X0Y1 (CLOCK_ROOT)    net (fo=4692, routed)        1.962     7.040    CLK_IBUF_BUFG
+    SLICE_X25Y131        FDCE                                         r  d_data_reg[1952]/C
+                         clock pessimism              0.407     7.447    
+                         clock uncertainty           -0.035     7.411    
+    SLICE_X25Y131        FDCE (Setup_HFF_SLICEL_C_D)
+                                                      0.027     7.438    d_data_reg[1952]
   -------------------------------------------------------------------
-                         required time                          7.496    
-                         arrival time                          -7.456    
+                         required time                          7.438    
+                         arrival time                          -7.363    
   -------------------------------------------------------------------
-                         slack                                  0.041    
+                         slack                                  0.076    
 
 
 

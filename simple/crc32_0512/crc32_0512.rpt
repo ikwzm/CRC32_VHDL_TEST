@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Thu Dec 16 01:12:44 2021
+| Date         : Tue Dec 21 14:40:52 2021
 | Host         : Jabberwock running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_utilization -file ./crc32_0512.rpt
 | Design       : crc32_0512_top
@@ -32,8 +32,8 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| CLB LUTs                | 1430 |     0 |     70560 |  2.03 |
-|   LUT as Logic          | 1430 |     0 |     70560 |  2.03 |
+| CLB LUTs                | 1416 |     0 |     70560 |  2.01 |
+|   LUT as Logic          | 1416 |     0 |     70560 |  2.01 |
 |   LUT as Memory         |    0 |     0 |     28800 |  0.00 |
 | CLB Registers           |  653 |     0 |    141120 |  0.46 |
 |   Register as Flip Flop |  653 |     0 |    141120 |  0.46 |
@@ -70,21 +70,21 @@ Table of Contents
 +--------------------------------------------+------+-------+-----------+-------+
 |                  Site Type                 | Used | Fixed | Available | Util% |
 +--------------------------------------------+------+-------+-----------+-------+
-| CLB                                        |  223 |     0 |      8820 |  2.53 |
-|   CLBL                                     |   97 |     0 |           |       |
-|   CLBM                                     |  126 |     0 |           |       |
-| LUT as Logic                               | 1430 |     0 |     70560 |  2.03 |
-|   using O5 output only                     |    6 |       |           |       |
-|   using O6 output only                     | 1232 |       |           |       |
-|   using O5 and O6                          |  192 |       |           |       |
+| CLB                                        |  212 |     0 |      8820 |  2.40 |
+|   CLBL                                     |   93 |     0 |           |       |
+|   CLBM                                     |  119 |     0 |           |       |
+| LUT as Logic                               | 1416 |     0 |     70560 |  2.01 |
+|   using O5 output only                     |    8 |       |           |       |
+|   using O6 output only                     | 1202 |       |           |       |
+|   using O5 and O6                          |  206 |       |           |       |
 | LUT as Memory                              |    0 |     0 |     28800 |  0.00 |
 |   LUT as Distributed RAM                   |    0 |     0 |           |       |
 |   LUT as Shift Register                    |    0 |     0 |           |       |
 | CLB Registers                              |  653 |     0 |    141120 |  0.46 |
-|   Register driven from within the CLB      |  133 |       |           |       |
-|   Register driven from outside the CLB     |  520 |       |           |       |
-|     LUT in front of the register is unused |   15 |       |           |       |
-|     LUT in front of the register is used   |  505 |       |           |       |
+|   Register driven from within the CLB      |  130 |       |           |       |
+|   Register driven from outside the CLB     |  523 |       |           |       |
+|     LUT in front of the register is unused |   28 |       |           |       |
+|     LUT in front of the register is used   |  495 |       |           |       |
 | Unique Control Sets                        |   67 |       |     17640 |  0.38 |
 +--------------------------------------------+------+-------+-----------+-------+
 * * Note: Available Control Sets calculated as Slices * 2, Review the Control Sets Report for more information regarding control sets.
@@ -227,7 +227,7 @@ Table of Contents
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------
 | Tool Version      : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date              : Thu Dec 16 01:12:47 2021
+| Date              : Tue Dec 21 14:40:54 2021
 | Host              : Jabberwock running 64-bit Ubuntu 18.04.4 LTS
 | Command           : report_timing -file ./crc32_0512.rpt -append
 | Design            : crc32_0512_top
@@ -238,27 +238,27 @@ Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 
 Timing Report
 
-Slack (MET) :             0.033ns  (required time - arrival time)
-  Source:                 i_data_reg[6]/C
-                            (rising edge-triggered cell FDCE clocked by CLK  {rise@0.000ns fall@1.050ns period=2.100ns})
-  Destination:            d_data_reg[342]/D
-                            (rising edge-triggered cell FDCE clocked by CLK  {rise@0.000ns fall@1.050ns period=2.100ns})
+Slack (MET) :             0.030ns  (required time - arrival time)
+  Source:                 d_last_reg/C
+                            (rising edge-triggered cell FDCE clocked by CLK  {rise@0.000ns fall@1.100ns period=2.200ns})
+  Destination:            CRCGEN/curr_crc_reg[31]/D
+                            (rising edge-triggered cell FDPE clocked by CLK  {rise@0.000ns fall@1.100ns period=2.200ns})
   Path Group:             CLK
   Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            2.100ns  (CLK rise@2.100ns - CLK rise@0.000ns)
-  Data Path Delay:        1.962ns  (logic 0.095ns (4.842%)  route 1.867ns (95.158%))
-  Logic Levels:           0  
-  Clock Path Skew:        -0.096ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    2.279ns = ( 4.379 - 2.100 ) 
-    Source Clock Delay      (SCD):    2.819ns
+  Requirement:            2.200ns  (CLK rise@2.200ns - CLK rise@0.000ns)
+  Data Path Delay:        2.077ns  (logic 0.267ns (12.855%)  route 1.810ns (87.145%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        -0.084ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.285ns = ( 4.485 - 2.200 ) 
+    Source Clock Delay      (SCD):    2.813ns
     Clock Pessimism Removal (CPR):    0.444ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
     Discrete Jitter          (DJ):    0.000ns
     Phase Error              (PE):    0.000ns
-  Clock Net Delay (Source):      1.929ns (routing 1.009ns, distribution 0.920ns)
-  Clock Net Delay (Destination): 1.701ns (routing 0.917ns, distribution 0.784ns)
+  Clock Net Delay (Source):      1.923ns (routing 1.009ns, distribution 0.914ns)
+  Clock Net Delay (Destination): 1.707ns (routing 0.917ns, distribution 0.790ns)
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
@@ -273,37 +273,40 @@ Slack (MET) :             0.033ns  (required time - arrival time)
                          net (fo=1, routed)           0.343     0.862    CLK_IBUF
     BUFGCE_X0Y62         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.028     0.890 r  CLK_IBUF_BUFG_inst/O
-    X1Y0 (CLOCK_ROOT)    net (fo=653, routed)         1.929     2.819    CLK_IBUF_BUFG
-    SLICE_X42Y43         FDCE                                         r  i_data_reg[6]/C
+    X1Y0 (CLOCK_ROOT)    net (fo=653, routed)         1.923     2.813    CLK_IBUF_BUFG
+    SLICE_X42Y52         FDCE                                         r  d_last_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X42Y43         FDCE (Prop_CFF_SLICEM_C_Q)
-                                                      0.095     2.914 r  i_data_reg[6]/Q
-                         net (fo=64, routed)          1.867     4.781    i_data[6]
-    SLICE_X41Y46         FDCE                                         r  d_data_reg[342]/D
+    SLICE_X42Y52         FDCE (Prop_EFF_SLICEM_C_Q)
+                                                      0.093     2.906 r  d_last_reg/Q
+                         net (fo=33, routed)          1.733     4.639    CRCGEN/d_last
+    SLICE_X45Y37         LUT6 (Prop_C6LUT_SLICEM_I5_O)
+                                                      0.174     4.813 r  CRCGEN/curr_crc[31]_i_1/O
+                         net (fo=1, routed)           0.077     4.890    CRCGEN/p_0_in[31]
+    SLICE_X45Y37         FDPE                                         r  CRCGEN/curr_crc_reg[31]/D
   -------------------------------------------------------------------    -------------------
 
-                         (clock CLK rise edge)        2.100     2.100 r  
-    B2                                                0.000     2.100 r  CLK (IN)
-                         net (fo=0)                   0.000     2.100    CLK_IBUF_inst/I
+                         (clock CLK rise edge)        2.200     2.200 r  
+    B2                                                0.000     2.200 r  CLK (IN)
+                         net (fo=0)                   0.000     2.200    CLK_IBUF_inst/I
     B2                   INBUF (Prop_INBUF_HPIOB_M_PAD_O)
-                                                      0.252     2.352 r  CLK_IBUF_inst/INBUF_INST/O
-                         net (fo=1, routed)           0.000     2.352    CLK_IBUF_inst/OUT
+                                                      0.252     2.452 r  CLK_IBUF_inst/INBUF_INST/O
+                         net (fo=1, routed)           0.000     2.452    CLK_IBUF_inst/OUT
     B2                   IBUFCTRL (Prop_IBUFCTRL_HPIOB_M_I_O)
-                                                      0.000     2.352 r  CLK_IBUF_inst/IBUFCTRL_INST/O
-                         net (fo=1, routed)           0.302     2.654    CLK_IBUF
+                                                      0.000     2.452 r  CLK_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, routed)           0.302     2.754    CLK_IBUF
     BUFGCE_X0Y62         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
-                                                      0.024     2.678 r  CLK_IBUF_BUFG_inst/O
-    X1Y0 (CLOCK_ROOT)    net (fo=653, routed)         1.701     4.379    CLK_IBUF_BUFG
-    SLICE_X41Y46         FDCE                                         r  d_data_reg[342]/C
-                         clock pessimism              0.444     4.822    
-                         clock uncertainty           -0.035     4.787    
-    SLICE_X41Y46         FDCE (Setup_BFF_SLICEL_C_D)
-                                                      0.027     4.814    d_data_reg[342]
+                                                      0.024     2.778 r  CLK_IBUF_BUFG_inst/O
+    X1Y0 (CLOCK_ROOT)    net (fo=653, routed)         1.707     4.485    CRCGEN/CLK
+    SLICE_X45Y37         FDPE                                         r  CRCGEN/curr_crc_reg[31]/C
+                         clock pessimism              0.444     4.928    
+                         clock uncertainty           -0.035     4.893    
+    SLICE_X45Y37         FDPE (Setup_CFF_SLICEM_C_D)
+                                                      0.027     4.920    CRCGEN/curr_crc_reg[31]
   -------------------------------------------------------------------
-                         required time                          4.814    
-                         arrival time                          -4.781    
+                         required time                          4.920    
+                         arrival time                          -4.890    
   -------------------------------------------------------------------
-                         slack                                  0.033    
+                         slack                                  0.030    
 
 
 
