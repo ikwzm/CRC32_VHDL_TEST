@@ -40,8 +40,8 @@ entity  CRC_GEN is
     generic (
         CRC_BITS  : integer := 32;
         CRC_POLY  : string  := "0xEDB88320";
+        CRC_INIT  : string  := "0xFFFFFFFF";
         CRC_RIGHT : boolean := TRUE;
-        CRC_INIT  : integer := 1;
         DATA_BITS : integer := 32
     );
     port (
@@ -65,34 +65,21 @@ architecture RTL of CRC_GEN is
     -------------------------------------------------------------------------------
     subtype   CRC_TYPE          is std_logic_vector(CRC_BITS-1 downto 0);
     signal    curr_crc          :  CRC_TYPE;
-    function  CONV_CRC_TYPE(CRC_POLY_STR : string) return CRC_TYPE is
-        variable   crc_poly_bit :  CRC_TYPE;
-        variable   crc_poly_len :  integer;
+    function  CONV_CRC_TYPE(CRC_STR : string) return CRC_TYPE is
+        variable   crc_bit      :  CRC_TYPE;
+        variable   crc_len      :  integer;
     begin
-        STRING_TO_STD_LOGIC_VECTOR(CRC_POLY_STR, crc_poly_bit, crc_poly_len);
-        return crc_poly_bit;
+        STRING_TO_STD_LOGIC_VECTOR(CRC_STR, crc_bit, crc_len);
+        return crc_bit;
     end CONV_CRC_TYPE;
     -------------------------------------------------------------------------------
     -- CRC用多項式(CRC_POLY)が整数のままだと使いにくいので、ビット配列に変換しておく
     -------------------------------------------------------------------------------
-    constant  CRC_POLY_BIT      : CRC_TYPE := CONV_CRC_TYPE(CRC_POLY);
+    constant  CRC_POLY_BIT      :  CRC_TYPE := CONV_CRC_TYPE(CRC_POLY);
     -------------------------------------------------------------------------------
-    -- CRCの初期値を計算する関数の定義
+    -- CRCの初期値もビット配列に変換しておく
     -------------------------------------------------------------------------------
-    function  CONV_CRC_INIT(CRC_INIT: integer) return CRC_TYPE is
-        variable crc_init_val   :  CRC_TYPE;
-    begin
-        if (CRC_INIT = 0) then
-            crc_init_val := (others => '0');
-        else
-            crc_init_val := (others => '1');
-        end if;
-        return crc_init_val;
-    end function;
-    -------------------------------------------------------------------------------
-    -- CRCの初期値
-    -------------------------------------------------------------------------------
-    constant  CRC_INIT_BIT      :  CRC_TYPE := CONV_CRC_INIT(CRC_INIT);
+    constant  CRC_INIT_BIT      :  CRC_TYPE := CONV_CRC_TYPE(CRC_INIT);
     -------------------------------------------------------------------------------
     -- １ビットの入力データに対してCRC演算する関数の定義
     -------------------------------------------------------------------------------
