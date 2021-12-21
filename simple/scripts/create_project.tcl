@@ -100,8 +100,12 @@ proc add_vhdl_file {fileset_name library_name file_name} {
     set_property "library"   $library_name $file_obj
 }
 add_vhdl_file sources_1 "WORK"  [file join $project_directory ".." "src" "crc_gen.vhd"]
-add_vhdl_file sources_1 "WORK"  [file join $project_directory "$top_name.vhd"]
-set_property top $top_name [get_filesets sources_1]
+add_vhdl_file sources_1 "WORK"  [file join $project_directory "${top_name}.vhd"]
+add_vhdl_file sim_1     "WORK"  [file join $project_directory "${top_name}_test.vhd"]
+set_property top     "${top_name}"      [get_filesets sources_1]
+set_property top     "${top_name}_test" [get_filesets sim_1]
+set_property generic FINISH_ABORT=true  [get_filesets sim_1]
+set_property -name {xsim.simulate.runtime} -value {10000ns} -objects [get_filesets sim_1]
 #
 # Close Project
 #

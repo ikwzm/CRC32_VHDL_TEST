@@ -15,12 +15,13 @@ CRC_IN_PARAM   := c
 CRC_OUT_PARAM  := o
 
 TARGET         := $(PROJECT_NAME).rpt
-SOURCE         := ../src/crc_gen.vhd 
-SOURCES        := build.tcl parameter.tcl timing.xdc $(TOP_NAME).vhd
+SOURCES        := create.tcl build.tcl parameter.tcl timing.xdc $(TOP_NAME).vhd $(TOP_NAME)_test.vhd
 
 sources: $(SOURCES)
 
-build: $(TARGET)
+project: $(PROJECT_NAME).xpr
+
+build:   $(PROJECT_NAME).rpt
 
 clean:
 	-rm $(SOURCES)
@@ -35,15 +36,26 @@ parameter.tcl :
 timing.xdc:
 	echo "create_clock -period " $(CLOCK_PERIOD) " -name CLK [get_port CLK]" > $@
 
-build.tcl :
+create.tcl : 
 	echo 'set     project_directory   [file dirname [info script]]' >  $@
 	echo 'source                      [file join $$project_directory "parameter.tcl"]' >> $@
 	echo 'lappend constrs_file_list   [file join $$project_directory "timing.xdc"]'    >> $@
 	echo 'source                      [file join $$project_directory ".." "scripts" "create_project.tcl"]' >> $@
+
+build.tcl :
+	echo 'set     project_directory   [file dirname [info script]]' >  $@
+	echo 'source                      [file join $$project_directory "parameter.tcl"]' >> $@
+	echo 'lappend constrs_file_list   [file join $$project_directory "timing.xdc"]'    >> $@
 	echo 'source                      [file join $$project_directory ".." "scripts" "implementation.tcl"]' >> $@
 
 $(TOP_NAME).vhd :
 	$(TOPGEN) -n $(CRC_NAME) -b $(NR_DATA_BITS) > $@
 
-$(PROJECT_NAME).rpt : $(SOURCES) $(SOURCE)
+$(TOP_NAME)_test.vhd : ../src/top_test.vhd
+	sed -e 's/crc_top/'$(TOP_NAME)'/g' < ../src/top_test.vhd > $@
+
+$(PROJECT_NAME).xpr : $(SOURCES) ../src/crc_gen.vhd
+	$(VIVADO) -mode batch -source create.tcl
+
+$(PROJECT_NAME).rpt : $(PROJECT_NAME).xpr build.tcl
 	$(VIVADO) -mode batch -source build.tcl
