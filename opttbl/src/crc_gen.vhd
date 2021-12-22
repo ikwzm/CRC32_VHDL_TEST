@@ -71,7 +71,7 @@ architecture RTL of CRC_GEN is
     begin
         STRING_TO_STD_LOGIC_VECTOR(CRC_STR, crc_bit, crc_len);
         return crc_bit;
-    end CONV_CRC_TYPE;
+    end function;
     -------------------------------------------------------------------------------
     -- CRC用多項式(CRC_POLY)が整数のままだと使いにくいので、ビット配列に変換しておく
     -------------------------------------------------------------------------------
@@ -85,32 +85,35 @@ architecture RTL of CRC_GEN is
     -------------------------------------------------------------------------------
     function  CALC_CRC(CRC:CRC_TYPE;D:std_logic) return CRC_TYPE is
         variable new_crc        :  CRC_TYPE;
+        variable sft_crc        :  CRC_TYPE;
         variable crc_xor_d_bit  :  std_logic;
-        variable prev_crc_bit   :  std_logic;
     begin
         if (CRC_RIGHT) then
-            crc_xor_d_bit := CRC(CRC'low) xor D;
-            prev_crc_bit  := '0';
-            for i in CRC_TYPE'high downto CRC_TYPE'low loop
-                if (CRC_POLY_BIT(i) = '1') then
-                    new_crc(i) := prev_crc_bit xor crc_xor_d_bit;
+            for i in CRC_TYPE'range loop
+                if (i = CRC_TYPE'high) then
+                    sft_crc(i) := '0';
                 else
-                    new_crc(i) := prev_crc_bit;
+                    sft_crc(i) := CRC(i+1);
                 end if;
-                prev_crc_bit := CRC(i);
             end loop;
+            crc_xor_d_bit := CRC(CRC_TYPE'low ) xor D;
         else
-            crc_xor_d_bit := CRC(CRC'high) xor D;
-            prev_crc_bit  := '0';
-            for i in CRC_TYPE'low to CRC_TYPE'high loop
-                if (CRC_POLY_BIT(i) = '1') then
-                    new_crc(i) := prev_crc_bit xor crc_xor_d_bit;
+            for i in CRC_TYPE'range loop
+                if (i = CRC_TYPE'low) then
+                    sft_crc(i) := '0';
                 else
-                    new_crc(i) := prev_crc_bit;
+                    sft_crc(i) := CRC(i-1);
                 end if;
-                prev_crc_bit := CRC(i);
             end loop;
+            crc_xor_d_bit := CRC(CRC_TYPE'high) xor D;
         end if;
+        for i in CRC_TYPE'range loop
+            if (CRC_POLY_BIT(i) = '1') then
+                new_crc(i) := sft_crc(i) xor crc_xor_d_bit;
+            else
+                new_crc(i) := sft_crc(i);
+            end if;
+        end loop;
         return new_crc;
     end function;
     -------------------------------------------------------------------------------
@@ -134,8 +137,8 @@ architecture RTL of CRC_GEN is
         variable table : CALC_CRC_OPT_TABLE_TYPE;
         variable carry : CALC_CRC_OPT_BIT_TYPE;
     begin
-        for i in 0 to CRC_BITS-1 loop
-            for crc_pos in 0 to CRC_BITS-1 loop
+        for i in CRC_TYPE'range loop
+            for crc_pos in CRC_TYPE'range loop
                 if (crc_pos = i) then
                     table(i).CRC_BIT(crc_pos) := '1';
                 else
@@ -146,23 +149,23 @@ architecture RTL of CRC_GEN is
         end loop;
         for i in 0 to DATA_BITS-1 loop
             if (CRC_RIGHT) then
-                carry := table(0);
+                carry := table(CRC_TYPE'low );
                 carry.DATA_BIT(i) := '1';
-                for crc_pos in 0 to CRC_BITS-2 loop
+                for crc_pos in CRC_TYPE'low to CRC_TYPE'high-1 loop
                     table(crc_pos) := table(crc_pos+1);
                 end loop;
-                table(CRC_BITS-1).CRC_BIT  := (others => '0');
-                table(CRC_BITS-1).DATA_BIT := (others => '0');
+                table(CRC_TYPE'high).CRC_BIT  := (others => '0');
+                table(CRC_TYPE'high).DATA_BIT := (others => '0');
             else
-                carry := table(CRC_BITS-1);
+                carry := table(CRC_TYPE'high);
                 carry.DATA_BIT(i) := '1';
-                for crc_pos in CRC_BITS-1 downto 1 loop
+                for crc_pos in CRC_TYPE'high downto CRC_TYPE'low+1 loop
                     table(crc_pos) := table(crc_pos-1);
                 end loop;
-                table(0).CRC_BIT  := (others => '0');
-                table(0).DATA_BIT := (others => '0');
+                table(CRC_TYPE'low ).CRC_BIT  := (others => '0');
+                table(CRC_TYPE'low ).DATA_BIT := (others => '0');
             end if;
-            for crc_pos in CRC_BITS-1 downto 0 loop
+            for crc_pos in CRC_TYPE'range loop
                 if (CRC_POLY_BIT(crc_pos) = '1') then
                     table(crc_pos).CRC_BIT  := table(crc_pos).CRC_BIT  xor carry.CRC_BIT;
                     table(crc_pos).DATA_BIT := table(crc_pos).DATA_BIT xor carry.DATA_BIT;
