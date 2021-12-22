@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Tue Dec 21 18:32:55 2021
+| Date         : Wed Dec 22 16:22:48 2021
 | Host         : Jabberwock running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_utilization -file ./crc32_1024.rpt
 | Design       : crc32_1024_top
@@ -227,7 +227,7 @@ Table of Contents
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------
 | Tool Version      : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date              : Tue Dec 21 18:32:58 2021
+| Date              : Wed Dec 22 16:22:51 2021
 | Host              : Jabberwock running 64-bit Ubuntu 18.04.4 LTS
 | Command           : report_timing -file ./crc32_1024.rpt -append
 | Design            : crc32_1024_top
@@ -278,7 +278,7 @@ Slack (MET) :             0.019ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
     SLICE_X36Y16         FDPE (Prop_CFF_SLICEL_C_Q)
                                                       0.097     2.922 r  CRCGEN/curr_crc_reg[20]/Q
-                         net (fo=4, routed)           0.484     3.406    CRCGEN/p_0_in39909_in
+                         net (fo=4, routed)           0.484     3.406    CRCGEN/p_0_in42978_in
     SLICE_X38Y13         LUT4 (Prop_E6LUT_SLICEL_I2_O)
                                                       0.148     3.554 r  CRCGEN/curr_crc[4]_i_36/O
                          net (fo=8, routed)           0.603     4.157    CRCGEN/curr_crc[4]_i_36_n_0
