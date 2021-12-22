@@ -71,7 +71,7 @@ architecture RTL of CRC_GEN is
     begin
         STRING_TO_STD_LOGIC_VECTOR(CRC_STR, crc_bit, crc_len);
         return crc_bit;
-    end CONV_CRC_TYPE;
+    end function;
     -------------------------------------------------------------------------------
     -- CRC用多項式(CRC_POLY)が整数のままだと使いにくいので、ビット配列に変換しておく
     -------------------------------------------------------------------------------
@@ -85,34 +85,37 @@ architecture RTL of CRC_GEN is
     -------------------------------------------------------------------------------
     function  CALC_CRC(CRC:CRC_TYPE;D:std_logic) return CRC_TYPE is
         variable new_crc        :  CRC_TYPE;
+        variable sft_crc        :  CRC_TYPE;
         variable crc_xor_d_bit  :  std_logic;
-        variable prev_crc_bit   :  std_logic;
     begin
         if (CRC_RIGHT) then
-            crc_xor_d_bit := CRC(CRC'low) xor D;
-            prev_crc_bit  := '0';
-            for i in CRC_TYPE'high downto CRC_TYPE'low loop
-                if (CRC_POLY_BIT(i) = '1') then
-                    new_crc(i) := prev_crc_bit xor crc_xor_d_bit;
+            for i in CRC_TYPE'range loop
+                if (i = CRC_TYPE'high) then
+                    sft_crc(i) := '0';
                 else
-                    new_crc(i) := prev_crc_bit;
+                    sft_crc(i) := CRC(i+1);
                 end if;
-                prev_crc_bit := CRC(i);
             end loop;
+            crc_xor_d_bit := CRC(CRC_TYPE'low ) xor D;
         else
-            crc_xor_d_bit := CRC(CRC'high) xor D;
-            prev_crc_bit  := '0';
-            for i in CRC_TYPE'low to CRC_TYPE'high loop
-                if (CRC_POLY_BIT(i) = '1') then
-                    new_crc(i) := prev_crc_bit xor crc_xor_d_bit;
+            for i in CRC_TYPE'range loop
+                if (i = CRC_TYPE'low) then
+                    sft_crc(i) := '0';
                 else
-                    new_crc(i) := prev_crc_bit;
+                    sft_crc(i) := CRC(i-1);
                 end if;
-                prev_crc_bit := CRC(i);
             end loop;
+            crc_xor_d_bit := CRC(CRC_TYPE'high) xor D;
         end if;
+        for i in CRC_TYPE'range loop
+            if (CRC_POLY_BIT(i) = '1') then
+                new_crc(i) := sft_crc(i) xor crc_xor_d_bit;
+            else
+                new_crc(i) := sft_crc(i);
+            end if;
+        end loop;
         return new_crc;
-    end CALC_CRC;
+    end function;
     -------------------------------------------------------------------------------
     -- 複数ビットまとめてCRC演算する関数の定義(簡易版)
     --    指定されたビット数の回数だけ上述のCALC_CRC関数を呼び出すだけの簡単な関数。
@@ -127,7 +130,7 @@ architecture RTL of CRC_GEN is
             new_crc := CALC_CRC(new_crc, D(i));
         end loop;
         return new_crc;
-    end CALC_CRC;
+    end function;
 begin
     process(CLK, RST) 
         variable next_crc :  CRC_TYPE;
