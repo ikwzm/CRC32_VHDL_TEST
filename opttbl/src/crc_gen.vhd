@@ -147,8 +147,8 @@ architecture RTL of CRC_GEN is
             end loop;
             table(i).DATA_BIT := (others => '0');
         end loop;
-        for i in 0 to DATA_BITS-1 loop
-            if (CRC_RIGHT) then
+        if (CRC_RIGHT) then
+            for i in 0 to DATA_BITS-1 loop
                 carry := table(CRC_TYPE'low );
                 carry.DATA_BIT(i) := '1';
                 for crc_pos in CRC_TYPE'low to CRC_TYPE'high-1 loop
@@ -156,7 +156,15 @@ architecture RTL of CRC_GEN is
                 end loop;
                 table(CRC_TYPE'high).CRC_BIT  := (others => '0');
                 table(CRC_TYPE'high).DATA_BIT := (others => '0');
-            else
+                for crc_pos in CRC_TYPE'range loop
+                    if (CRC_POLY_BIT(crc_pos) = '1') then
+                        table(crc_pos).CRC_BIT  := table(crc_pos).CRC_BIT  xor carry.CRC_BIT;
+                        table(crc_pos).DATA_BIT := table(crc_pos).DATA_BIT xor carry.DATA_BIT;
+                    end if;
+                end loop;
+            end loop;
+        else
+            for i in 0 to DATA_BITS-1 loop
                 carry := table(CRC_TYPE'high);
                 carry.DATA_BIT(i) := '1';
                 for crc_pos in CRC_TYPE'high downto CRC_TYPE'low+1 loop
@@ -164,14 +172,14 @@ architecture RTL of CRC_GEN is
                 end loop;
                 table(CRC_TYPE'low ).CRC_BIT  := (others => '0');
                 table(CRC_TYPE'low ).DATA_BIT := (others => '0');
-            end if;
-            for crc_pos in CRC_TYPE'range loop
-                if (CRC_POLY_BIT(crc_pos) = '1') then
-                    table(crc_pos).CRC_BIT  := table(crc_pos).CRC_BIT  xor carry.CRC_BIT;
-                    table(crc_pos).DATA_BIT := table(crc_pos).DATA_BIT xor carry.DATA_BIT;
-                end if;
+                for crc_pos in CRC_TYPE'range loop
+                    if (CRC_POLY_BIT(crc_pos) = '1') then
+                        table(crc_pos).CRC_BIT  := table(crc_pos).CRC_BIT  xor carry.CRC_BIT;
+                        table(crc_pos).DATA_BIT := table(crc_pos).DATA_BIT xor carry.DATA_BIT;
+                    end if;
+                end loop;
             end loop;
-        end loop;
+        end if;
         return table;
     end function;
     -------------------------------------------------------------------------------
